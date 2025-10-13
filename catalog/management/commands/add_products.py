@@ -11,4 +11,3 @@ class Command(BaseCommand):
         Product.objects.all().delete()
         call_command("loaddata", "catalog_fixture.json")
         self.stdout.write(self.style.SUCCESS("Fixtures loaded successfully"))
-
