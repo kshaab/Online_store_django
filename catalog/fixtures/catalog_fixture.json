@@ -1,65 +1,80 @@
 [
 {
-    "model": "catalog.category",
-    "pk": 1,
+    "model": "catalog.product",
+    "pk": 4,
     "fields": {
-        "name": "Смартфоны",
-        "description": "Современные устройства для связи"
-    }
-},
-{
-    "model": "catalog.category",
-    "pk": 2,
-    "fields": {
-        "name": "Телевизоры",
-        "description": "Любимые фильмы на большом экране"
-    }
-},
-{
-    "model": "catalog.category",
-    "pk": 3,
-    "fields": {
-        "name": "Стиральные машины",
-        "description": "Стирка без проблем"
+        "name": "Мебельный болт",
+        "description": "Мебельный болт (неполная резьба). Длина М6*40, 10 кг в упаковке.",
+        "image": "products/bolt_furniture.png",
+        "category": 5,
+        "price": "1860.00",
+        "created_at": "2025-10-16",
+        "updated_at": "2025-10-16"
     }
 },
 {
     "model": "catalog.product",
-    "pk": 1,
+    "pk": 5,
     "fields": {
-        "name": "IPhone",
-        "description": null,
-        "image": "",
-        "category": 1,
-        "price": "50000.00",
-        "created_at": "2025-01-01",
-        "updated_at": null
+        "name": "Болт с шестигранной головкой",
+        "description": "Болт с шестигранной головкой (полная резьба). 5 кг в упаковке.",
+        "image": "products/Bolt_933.png",
+        "category": 5,
+        "price": "940.00",
+        "created_at": "2025-10-16",
+        "updated_at": "2025-10-16"
     }
 },
 {
     "model": "catalog.product",
-    "pk": 2,
+    "pk": 6,
     "fields": {
-        "name": "Samsung",
-        "description": "Новая модель",
-        "image": "",
-        "category": 1,
-        "price": "30000.00",
-        "created_at": null,
-        "updated_at": null
+        "name": "Кровельный саморез",
+        "description": "Саморез кровельный (RAL 8017).",
+        "image": "products/ral_8017.png",
+        "category": 4,
+        "price": "600.00",
+        "created_at": "2025-10-16",
+        "updated_at": "2025-10-16"
     }
 },
 {
     "model": "catalog.product",
-    "pk": 3,
+    "pk": 7,
     "fields": {
-        "name": "LG",
-        "description": null,
-        "image": "",
-        "category": 2,
-        "price": "155000.00",
-        "created_at": null,
-        "updated_at": null
+        "name": "Саморез для крепления ГВЛ",
+        "description": "Саморез для крепления ГВЛ.",
+        "image": "products/GVL.png",
+        "category": 4,
+        "price": "430.00",
+        "created_at": "2025-10-16",
+        "updated_at": "2025-10-16"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+        "name": "Нагель",
+        "description": "Нагель. 200 шт в упаковке.",
+        "image": "products/Nagel.png",
+        "category": 6,
+        "price": "412.00",
+        "created_at": "2025-10-16",
+        "updated_at": "2025-10-16"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+        "name": "Глухарь",
+        "description": "Глухарь (для лаг и реек). 100 шт в упаковке.",
+        "image": "products/Gluhar.png",
+        "category": 6,
+        "price": "150.00",
+        "created_at": "2025-10-16",
+        "updated_at": "2025-10-16"
     }
 }
 ]
