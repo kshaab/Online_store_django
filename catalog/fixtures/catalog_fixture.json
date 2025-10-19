@@ -1,0 +1,65 @@
+[
+{
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "name": "Смартфоны",
+        "description": "Современные устройства для связи"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "name": "Телевизоры",
+        "description": "Любимые фильмы на большом экране"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+        "name": "Стиральные машины",
+        "description": "Стирка без проблем"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+        "name": "IPhone",
+        "description": null,
+        "image": "",
+        "category": 1,
+        "price": "50000.00",
+        "created_at": "2025-01-01",
+        "updated_at": null
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+        "name": "Samsung",
+        "description": "Новая модель",
+        "image": "",
+        "category": 1,
+        "price": "30000.00",
+        "created_at": null,
+        "updated_at": null
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+        "name": "LG",
+        "description": null,
+        "image": "",
+        "category": 2,
+        "price": "155000.00",
+        "created_at": null,
+        "updated_at": null
+    }
+}
+]

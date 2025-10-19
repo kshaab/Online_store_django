@@ -43,7 +43,7 @@ Python 3.13
 
 Django 5.x
 
-SQLite (по умолчанию)
+PostgreSQL 
 
 HTML / CSS / Bootstrap
 
