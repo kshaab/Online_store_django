@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from catalog.models import Product, Contacts
+from django.shortcuts import get_object_or_404, render
+
+from catalog.models import Contacts, Product
 
 
 def home(request):
@@ -19,7 +20,7 @@ def contacts_post(request):
     if request.method == "POST":
         name = request.POST.get("name")
         message = request.POST.get("message")
-        return HttpResponse(f"Спасибо, {name}! Ваше сообщение получено.")
+        return HttpResponse(f"Спасибо, {name}! Ваше сообщение {message} получено.")
     return render(request, "catalog/templates/contacts.html")
 
 
