@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.generic.edit import CreateView
 from catalog.models import Contacts, Product
 from django.urls import reverse_lazy
+from django.core.paginator import Paginator
 
 
 def home(request):
@@ -32,8 +33,11 @@ def products_detail(request, pk):
 
 
 def products_list(request):
-    products = Product.objects.all()
-    context = {"products": products}
+    products = Product.objects.all().order_by('id')
+    paginator = Paginator(products, 3)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context = {"page_obj": page_obj}
     return render(request, "products_list.html", context)
 
 
