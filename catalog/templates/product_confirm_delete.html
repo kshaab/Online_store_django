@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Создать продукт{% endblock %}
+
+{% block content %}
+<h2>Удалить товар {{ product.name }}?</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-secondary">Удалить</button>
+    <a href="/home/" class="btn btn-danger">Отмена</a>
+</form>
+{% endblock %}

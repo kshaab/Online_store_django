@@ -7,7 +7,7 @@
 </div>
 <div class="container mt-5">
     <div class="row g-4">
-        {% for product in page_obj %}
+        {% for product in products %}
         <div class="col-sm-6 col-md-4 col-lg-3 d-flex">
             <div class="card flex-fill text-center shadow-sm h-100">
                    {% if product.image %}
@@ -20,9 +20,17 @@
                     <p class="card-text small text-muted" style="min-height: 40px;">
                         {{ product.description|truncatechars:100 }}
                     </p>
-                    <a href="/products/{{ product.id }}/" class="btn btn-secondary mt-auto">
-                        Посмотреть товар
-                    </a>
+                    <div class="d-grid gap-2">
+                        <a href="/product/{{ product.id }}/" class="btn btn-secondary mt-auto">
+                            Посмотреть товар
+                        </a>
+                         <a href="/product/{{ product.id }}/update/" class="btn btn-secondary mt-auto">
+                             Редактировать
+                        </a>
+                        <a href="/product/{{ product.id }}/delete/" class="btn btn-danger mt-auto">
+                             Удалить
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

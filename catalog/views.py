@@ -1,48 +1,65 @@
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
-from django.views.generic.edit import CreateView
+from django.shortcuts import render
+from django.views import View
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView, DeleteView
+
 from catalog.models import Contacts, Product
-from django.urls import reverse_lazy
-from django.core.paginator import Paginator
+from django.urls import reverse_lazy, reverse
+
+from django.views.generic.edit import CreateView
 
 
-def home(request):
-    last_products = Product.objects.order_by("-created_at")[:5]
-    for product in last_products:
-        print(product)
-    return render(request, "base.html")
+class BaseTemplateView(TemplateView):
+    template_name = "base.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["last_products"] = Product.objects.order_by("-created_at")[:5]
+        return context
 
+class ContactsView(View):
+    template_name = "contacts.html"
 
-def contacts(request):
-    contact = Contacts.objects.first()
-    return render(request, "contacts.html", {"contact": contact})
+    def get(self, request, *args, **kwargs):
+        contact = Contacts.objects.first()
+        return render(request, self.template_name, {"contact": contact})
 
-
-def contacts_post(request):
-    if request.method == "POST":
+    def post(self, request, *args, **kwargs):
         name = request.POST.get("name")
         message = request.POST.get("message")
-        return HttpResponse(f"Спасибо, {name}! Ваше сообщение {message} получено.")
-    return render(request, "catalog/templates/contacts.html")
+        return HttpResponse(f"Спасибо, {name}! Ваше сообщение '{message}' получено.")
 
 
-def products_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    context = {"product": product}
-    return render(request, "products_detail.html", context)
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = "product_detail.html"
+    context_object_name = "product"
 
-
-def products_list(request):
-    products = Product.objects.all().order_by('id')
-    paginator = Paginator(products, 3)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-    context = {"page_obj": page_obj}
-    return render(request, "products_list.html", context)
-
+class ProductListView(ListView):
+    model = Product
+    template_name = "product_list.html"
+    context_object_name = "products"
+    paginate_by = 4
+    ordering = ["id"]
 
 class ProductCreateView(CreateView):
     model = Product
     fields = ["name", "description", "category" ,"price", "image"]
     template_name = "product_form.html"
     success_url = reverse_lazy("catalog:home")
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ["name", "description", "category" ,"price", "image"]
+    template_name = "product_form.html"
+    success_url = reverse_lazy("catalog:home")
+
+    def get_success_url(self):
+        return reverse("catalog:product_detail", args=[self.kwargs.get("pk")])
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = "product_confirm_delete.html"
+    success_url = reverse_lazy("catalog:home")
+
