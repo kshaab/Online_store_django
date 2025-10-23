@@ -11,10 +11,12 @@ from django.views.generic.edit import CreateView
 
 class BaseTemplateView(TemplateView):
     template_name = "base.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["last_products"] = Product.objects.order_by("-created_at")[:5]
         return context
+
 
 class ContactsView(View):
     template_name = "contacts.html"
@@ -34,6 +36,7 @@ class ProductDetailView(DetailView):
     template_name = "product_detail.html"
     context_object_name = "product"
 
+
 class ProductListView(ListView):
     model = Product
     template_name = "product_list.html"
@@ -41,16 +44,17 @@ class ProductListView(ListView):
     paginate_by = 4
     ordering = ["id"]
 
+
 class ProductCreateView(CreateView):
     model = Product
-    fields = ["name", "description", "category" ,"price", "image"]
+    fields = ["name", "description", "category", "price", "image"]
     template_name = "product_form.html"
     success_url = reverse_lazy("catalog:home")
 
 
 class ProductUpdateView(UpdateView):
     model = Product
-    fields = ["name", "description", "category" ,"price", "image"]
+    fields = ["name", "description", "category", "price", "image"]
     template_name = "product_form.html"
     success_url = reverse_lazy("catalog:home")
 
@@ -62,4 +66,3 @@ class ProductDeleteView(DeleteView):
     model = Product
     template_name = "product_confirm_delete.html"
     success_url = reverse_lazy("catalog:home")
-
