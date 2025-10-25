@@ -16,7 +16,7 @@ class BlogPostListView(ListView):
     model = BlogPost
     template_name = "blog_list.html"
     context_object_name = "blog_posts"
-    paginate_by = 1
+    paginate_by = 2
     ordering = ["id"]
 
 

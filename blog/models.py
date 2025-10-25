@@ -15,7 +15,7 @@ class BlogPost(models.Model):
         null=True,
     )
     publicate = models.BooleanField(verbose_name="Признак публикации", default=True)
-    views = models.IntegerField(verbose_name="Количество просмотров")
+    views = models.IntegerField(default=0, verbose_name="Количество просмотров")
 
     class Meta:
         verbose_name = "Пост"
