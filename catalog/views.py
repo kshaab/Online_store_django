@@ -1,12 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, TemplateView, UpdateView, DeleteView
+from django.views.generic import DeleteView, DetailView, ListView, TemplateView, UpdateView
+from django.views.generic.edit import CreateView
 
 from catalog.models import Contacts, Product
-from django.urls import reverse_lazy, reverse
-
-from django.views.generic.edit import CreateView
 
 
 class BaseTemplateView(TemplateView):

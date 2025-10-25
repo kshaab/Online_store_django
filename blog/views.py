@@ -1,6 +1,8 @@
-from django.urls import reverse_lazy, reverse
+from django.conf import settings
+from django.core.mail import send_mail
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from blog.models import BlogPost
 
@@ -19,11 +21,30 @@ class BlogPostListView(ListView):
     paginate_by = 2
     ordering = ["id"]
 
+    def get_queryset(self):
+        return BlogPost.objects.filter(publicate=True)
+
 
 class BlogPostDetailView(DetailView):
     model = BlogPost
     template_name = "blog_detail.html"
     context_object_name = "blog_post"
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        obj.views += 1
+        obj.save(update_fields=["views"])
+        if obj.views == 100 and not obj.notified:
+            send_mail(
+                subject="Ваша статья набрала 100 просмотров!",
+                message=f"Поздравляем! Ваша статья '{obj.title}' набрала 100 просмотров!",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.DEFAULT_FROM_EMAIL],
+                fail_silently=True,
+            )
+            obj.notified = True
+            obj.save(update_fields=["notified"])
+        return obj
 
 
 class BlogPostUpdateView(UpdateView):
@@ -40,4 +61,3 @@ class BlogPostDeleteView(DeleteView):
     model = BlogPost
     template_name = "blog_confirm_delete.html"
     success_url = reverse_lazy("blog:blog")
-

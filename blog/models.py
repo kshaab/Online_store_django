@@ -16,6 +16,7 @@ class BlogPost(models.Model):
     )
     publicate = models.BooleanField(verbose_name="Признак публикации", default=True)
     views = models.IntegerField(default=0, verbose_name="Количество просмотров")
+    notified = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Пост"
@@ -23,7 +24,3 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
-
-
-
-
