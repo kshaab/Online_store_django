@@ -4,12 +4,13 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from blog.forms import BlogPostForm
 from blog.models import BlogPost
 
 
 class BlogPostCreateView(CreateView):
     model = BlogPost
-    fields = ["title", "content", "preview"]
+    form_class = BlogPostForm
     template_name = "blog_form.html"
     success_url = reverse_lazy("blog:blog")
 
@@ -49,7 +50,7 @@ class BlogPostDetailView(DetailView):
 
 class BlogPostUpdateView(UpdateView):
     model = BlogPost
-    fields = ["title", "content", "preview"]
+    form_class = BlogPostForm
     template_name = "blog_form.html"
     success_url = reverse_lazy("blog:blog")
 

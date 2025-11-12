@@ -2,11 +2,9 @@ from django.db import models
 
 
 class BlogPost(models.Model):
-    title = models.CharField(max_length=100, verbose_name="Заголовок", help_text="Введите заголовок поста")
-    content = models.TextField(verbose_name="Содержимое", help_text="Введите содержимое поста")
-    preview = models.ImageField(
-        upload_to="preview/", verbose_name="Превью", help_text="Загрузите изображение", blank=True, null=True
-    )
+    title = models.CharField(max_length=100, verbose_name="Заголовок")
+    content = models.TextField(verbose_name="Содержимое")
+    preview = models.ImageField(upload_to="preview/", verbose_name="Превью", blank=True, null=True)
     created_at = models.DateField(
         auto_now_add=True,
         verbose_name="Дата создания",
@@ -16,7 +14,7 @@ class BlogPost(models.Model):
     )
     publicate = models.BooleanField(verbose_name="Признак публикации", default=True)
     views = models.IntegerField(default=0, verbose_name="Количество просмотров")
-    notified = models.BooleanField(default=False)
+    notified = models.BooleanField(verbose_name="Уведомление", default=False)
 
     class Meta:
         verbose_name = "Пост"

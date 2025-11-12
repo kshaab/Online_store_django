@@ -16,18 +16,13 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=150, verbose_name="Наименование", help_text="Введите наименование товара")
-    description = models.TextField(
-        max_length=100, verbose_name="Описание", help_text="Введите описание товара", blank=True, null=True
-    )
-    image = models.ImageField(
-        upload_to="products/", verbose_name="Изображение", help_text="Загрузите изображение", blank=True, null=True
-    )
+    name = models.CharField(max_length=150, verbose_name="Наименование")
+    description = models.TextField(max_length=100, verbose_name="Описание", blank=True, null=True)
+    image = models.ImageField(upload_to="products/", verbose_name="Изображение", blank=True, null=True)
     category = models.ForeignKey(
         to=Category,
         on_delete=models.SET_NULL,
         verbose_name="Категория",
-        help_text="Введите категорию",
         blank=True,
         null=True,
         related_name="products",
@@ -36,7 +31,6 @@ class Product(models.Model):
         max_digits=10,
         decimal_places=2,
         verbose_name="Цена за покупку",
-        help_text="Введите цену за покупку",
         blank=True,
         null=True,
     )
@@ -53,6 +47,7 @@ class Product(models.Model):
         blank=True,
         null=True,
     )
+    on_sale = models.BooleanField(default=False, verbose_name="Участвует в акции")
 
     class Meta:
         verbose_name = "Продукт"
