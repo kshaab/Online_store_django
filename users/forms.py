@@ -18,18 +18,13 @@ class StyleFormMixin:
         }
         for name, placeholder in field_styles.items():
             if name in self.fields:
-                self.fields[name].widget.attrs.update({
-                    "class": "form-control",
-                    "placeholder": placeholder
-                })
+                self.fields[name].widget.attrs.update({"class": "form-control", "placeholder": placeholder})
 
 
-
-class UserRegisterForm(StyleFormMixin ,UserCreationForm):
+class UserRegisterForm(StyleFormMixin, UserCreationForm):
     class Meta:
         model = User
         fields = ["email", "password1", "password2"]
-
 
 
 class UserUpdateForm(StyleFormMixin, forms.ModelForm):

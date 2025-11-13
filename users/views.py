@@ -1,12 +1,11 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
+
 from users.forms import UserRegisterForm, UserUpdateForm
 from users.models import User
-from django.conf import settings
-
-
 
 
 class UserCreateView(CreateView):
@@ -19,7 +18,7 @@ class UserCreateView(CreateView):
         user = form.save()
         send_mail(
             subject="Добро пожаловать на сайт!",
-            message=f"Приветствуем! Спасибо за регистрацию на нашем сайте!",
+            message="Приветствуем! Спасибо за регистрацию на нашем сайте!",
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[user.email],
             fail_silently=True,
@@ -35,6 +34,3 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-
-
-
