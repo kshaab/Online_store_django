@@ -24,12 +24,14 @@
                         <a href="/product/{{ product.id }}/" class="btn btn-secondary mt-auto">
                             Посмотреть товар
                         </a>
+                        {% if user.is_authenticated %}
                          <a href="/product/{{ product.id }}/update/" class="btn btn-secondary mt-auto">
                              Редактировать
                         </a>
                         <a href="/product/{{ product.id }}/delete/" class="btn btn-danger mt-auto">
                              Удалить
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
