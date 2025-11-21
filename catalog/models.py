@@ -48,10 +48,12 @@ class Product(models.Model):
         null=True,
     )
     on_sale = models.BooleanField(default=False, verbose_name="Участвует в акции")
+    publication_status = models.BooleanField(default=False, verbose_name="Публикация продукта")
 
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
+        permissions = [("can_unpublish_product", "Can unpublish product"),]
 
     def __str__(self):
         return self.name
@@ -68,3 +70,4 @@ class Contacts(models.Model):
 
     def __str__(self):
         return f"{self.country}, {self.inn},{self.address}"
+

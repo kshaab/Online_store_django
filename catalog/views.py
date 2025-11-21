@@ -1,6 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import DeleteView, DetailView, ListView, TemplateView, UpdateView
@@ -67,3 +67,26 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = "product_confirm_delete.html"
     success_url = reverse_lazy("catalog:home")
+
+    def post(self, request, *args, **kwargs):
+        product = Product.objects.get(pk=self.kwargs.get("pk"))
+
+        if not request.user.has_perm("catalog.delete_product"):
+            return HttpResponseForbidden("У вас нет прав для удаления продукта.")
+
+        product.delete()
+        return redirect("catalog:home")
+
+
+class ProductUnpublishView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = "catalog.can_unpublish_product"
+
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        product.is_published = False
+        product.save()
+        return redirect("catalog:product_detail", pk=pk)
+
+    def get(self, request, pk):
+        return self.post(request, pk)
+
