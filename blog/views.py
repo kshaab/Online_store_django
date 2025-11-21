@@ -1,14 +1,24 @@
+from typing import Optional
+
 from django.conf import settings
 from django.core.mail import send_mail
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.http import HttpResponseForbidden, HttpRequest
 from blog.forms import BlogPostForm
 from blog.models import BlogPost
 
 
-class BlogPostCreateView(CreateView):
+class ContentManagerRequiredMixin(UserPassesTestMixin):
+    request: Optional[HttpRequest]
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.groups.filter(name="Контент-менеджер").exists()
+    def handle_no_permission(self):
+        return HttpResponseForbidden("У вас нет прав для управления блог-постами.")
+
+class BlogPostCreateView(ContentManagerRequiredMixin, CreateView):
     model = BlogPost
     form_class = BlogPostForm
     template_name = "blog_form.html"
@@ -24,6 +34,11 @@ class BlogPostListView(ListView):
 
     def get_queryset(self):
         return BlogPost.objects.filter(publicate=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_content_manager'] = self.request.user.groups.filter(name="Контент-менеджер").exists()
+        return context
 
 
 class BlogPostDetailView(DetailView):
@@ -48,7 +63,7 @@ class BlogPostDetailView(DetailView):
         return obj
 
 
-class BlogPostUpdateView(UpdateView):
+class BlogPostUpdateView(ContentManagerRequiredMixin, UpdateView):
     model = BlogPost
     form_class = BlogPostForm
     template_name = "blog_form.html"
@@ -58,7 +73,7 @@ class BlogPostUpdateView(UpdateView):
         return reverse("blog:blog_detail", args=[self.kwargs.get("pk")])
 
 
-class BlogPostDeleteView(DeleteView):
+class BlogPostDeleteView(ContentManagerRequiredMixin, DeleteView):
     model = BlogPost
     template_name = "blog_confirm_delete.html"
     success_url = reverse_lazy("blog:blog")
