@@ -25,31 +25,30 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
         fields = ["name", "description", "category", "price", "image", "on_sale"]
 
     def clean_name(self):
-        name = self.cleaned_data.get("name").lower()
+        name = self.cleaned_data.get("name")
+        name_lower = name.lower()
         for word in FORBIDDEN_WORDS:
-            if word in name:
+            if word in name_lower:
                 raise forms.ValidationError("Название содержит запрещенное слово")
         return name
 
     def clean_description(self):
-        description = self.cleaned_data.get("description").lower().strip()
-        for word in FORBIDDEN_WORDS:
-            if word in description:
-                raise forms.ValidationError("Описание содержит запрещенное слово")
+        description = self.cleaned_data.get("description")
+        if description:
+            description_lower = description.lower().strip()
+            for word in FORBIDDEN_WORDS:
+                if word in description_lower:
+                    raise forms.ValidationError("Описание содержит запрещенное слово")
         return description
 
-    def clean_price(self):
-        price = self.cleaned_data.get("price")
-        if price is not None and price < 0:
-            raise forms.ValidationError("Цена не может быть отрицательной")
-        return price
 
     def clean_image(self):
         image = self.cleaned_data.get("image")
         if image:
             max_size = 5 * 1024 * 1024
             if image.size > max_size:
-                raise forms.ValidationError("Размер файла не должен превышать 5MG")
+                raise forms.ValidationError("Размер файла не должен превышать 5MB")
             valid_formats = ["image/jpeg", "image/png"]
             if image.content_type not in valid_formats:
                 raise ValidationError("Поддерживаются только файлы JPEG и PNG")
+        return image

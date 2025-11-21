@@ -52,6 +52,10 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     template_name = "product_form.html"
     success_url = reverse_lazy("catalog:home")
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
@@ -62,20 +66,26 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse("catalog:product_detail", args=[self.kwargs.get("pk")])
 
+    def dispatch(self, request, *args, **kwargs):
+        product = self.get_object()
+        if product.owner != request.user:
+            return HttpResponseForbidden("Вы не владелец подукта.")
+        return super().dispatch(request, *args, **kwargs)
+
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = "product_confirm_delete.html"
     success_url = reverse_lazy("catalog:home")
 
-    def post(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         product = Product.objects.get(pk=self.kwargs.get("pk"))
-
-        if not request.user.has_perm("catalog.delete_product"):
+        is_owner = product.owner == request.user
+        is_moderator = request.user.groups.filter(name="Модератор продуктов").exists()
+        has_permission = request.user.has_perm("catalog.delete_product")
+        if not (is_owner or (is_moderator and has_permission)):
             return HttpResponseForbidden("У вас нет прав для удаления продукта.")
-
-        product.delete()
-        return redirect("catalog:home")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProductUnpublishView(LoginRequiredMixin, PermissionRequiredMixin, View):
