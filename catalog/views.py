@@ -7,7 +7,7 @@ from django.views.generic import DeleteView, DetailView, ListView, TemplateView,
 from django.views.generic.edit import CreateView
 
 from catalog.forms import ProductForm
-from catalog.models import Contacts, Product, Category
+from catalog.models import Category, Contacts, Product
 from catalog.services import ProductService
 
 
@@ -126,6 +126,3 @@ class ProductByCategoryView(ListView):
         context["category_name"] = self.kwargs["category_name"]
         context["categories"] = Category.objects.all()
         return context
-
-
-

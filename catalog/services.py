@@ -34,10 +34,3 @@ class ProductService:
         products = Product.objects.all()
         cache.set(key, products)
         return products
-
-
-
-
-
-
-
