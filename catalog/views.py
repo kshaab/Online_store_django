@@ -7,7 +7,8 @@ from django.views.generic import DeleteView, DetailView, ListView, TemplateView,
 from django.views.generic.edit import CreateView
 
 from catalog.forms import ProductForm
-from catalog.models import Contacts, Product
+from catalog.models import Category, Contacts, Product
+from catalog.services import ProductService
 
 
 class BaseTemplateView(TemplateView):
@@ -44,6 +45,14 @@ class ProductListView(ListView):
     context_object_name = "products"
     paginate_by = 4
     ordering = ["id"]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
+
+    def get_queryset(self):
+        return ProductService.get_products_from_cache()
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -99,3 +108,21 @@ class ProductUnpublishView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
     def get(self, request, pk):
         return self.post(request, pk)
+
+
+class ProductByCategoryView(ListView):
+    model = Product
+    template_name = "product_list.html"
+    context_object_name = "products"
+    paginate_by = 4
+    ordering = ["id"]
+
+    def get_queryset(self):
+        category_name = self.kwargs.get("category_name")
+        return ProductService.get_product_list(category_name)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category_name"] = self.kwargs["category_name"]
+        context["categories"] = Category.objects.all()
+        return context

@@ -5,6 +5,27 @@
     <h1 class="display-4">Восточный крепеж</h1>
     <p class="lead">Широкий ассортимент крепежных изделий</p>
 </div>
+<div class="pricing-header px-3 py-3 pt-md-4 pb-md-4 mx-auto text-center">
+{% if category_name %}
+    <h4 class="display-6">Категория: {{ category_name }}</h4>
+    <p class="lead">Товары из выбранной категории</p>
+{% endif %}
+</div>
+<div class="pricing-header px-3 py-3 mx-auto text-center">
+    <div class="d-flex flex-wrap gap-2 justify-content-center">
+        <a href="{% url 'catalog:home' %}"
+           class="btn btn-secondary {% if not category_name %}active{% endif %}">
+            Все продукты
+        </a>
+        {% for cat in categories %}
+            <a href="{% url "catalog:products_by_category" cat.name %}"
+               class="btn btn-outline-secondary {% if category_name == cat.name %}active{% endif %}">
+                {{ cat.name }}
+            </a>
+        {% endfor %}
+
+    </div>
+</div>
 <div class="container mt-5">
     <div class="row g-4">
         {% for product in products %}
